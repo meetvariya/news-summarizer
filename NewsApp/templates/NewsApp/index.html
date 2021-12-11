@@ -1,0 +1,312 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Template Name: Ost Magazine
+Author: <a href="http://www.os-templates.com/">OS Templates</a>
+Author URI: http://www.os-templates.com/
+Licence: Free to use under our free template licence terms
+Licence URI: http://www.os-templates.com/template-terms
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  {% load static %}
+  <title>News</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="/static/NewsApp/css/layout.css" type="text/css" />
+  <script type="text/javascript" src="/static/NewsApp/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/NewsApp/js/jquery.cycle.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#featured_slide').after('<div id="fsn"><ul id="fs_pagination">').cycle({
+        timeout: 5000,
+        fx: 'fade',
+        pager: '#fs_pagination',
+        pause: 1,
+        pauseOnPagerHover: 0
+      });
+    });
+  </script>
+</head>
+
+<body id="top">
+  <div class="wrapper col0">
+    <div id="topline">
+      <!-- add a tagline here -->
+      
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper col1">
+    <div id="header">
+      <div id="topnav">
+        <ul>
+          <li class="last"><a href="#footer">About Us</a><span>about us</span></li>
+        </ul>
+
+        {% if user.is_staff %}
+        <li><a href="/logout">Logout</a><span>{{ user.username }}</span></li>
+        <li> <a href="/reset_password">Change password</a></li>
+        {% elif user.is_authenticated %}
+        <li> <a href="{% url 'account'  %}">Profile</a>
+          <span>
+            LOCATION:
+            {% if request.user.customer.location == 'at' %}
+            Austria
+            {% elif request.user.customer.location == 'be' %}
+            Belgium
+            {% elif request.user.customer.location == 'bg' %}
+            Bulgaria
+            {% elif request.user.customer.location == 'ca' %}
+            Canada
+            {% elif request.user.customer.location == 'in' %}
+            India
+            {% elif request.user.customer.location == 'fn' %}
+            France
+            {% elif request.user.customer.location == 'si' %}
+            Slovenia
+            {% elif request.user.customer.location == 'se' %}
+            Sweden
+            {% elif request.user.customer.location == 'de' %}
+            Germany
+            {% elif request.user.customer.location == 'gr' %}
+            Greece
+            {% elif request.user.customer.location == 'lt' %}
+            Lithuania
+            {% elif request.user.customer.location == 'nl' %}
+            Netherlands
+            {% elif request.user.customer.location == 'au' %}
+            Australia
+            {% elif request.user.customer.location == 'eg' %}
+            Eygypt
+            {% elif request.user.customer.location == 'ru' %}
+            Russia
+            {% elif request.user.customer.location == 'sg' %}
+            Singapore
+            {% endif %}
+          </span>
+        </li>
+        <li> <a href="/logout">Logout</a><span>{{ user.username }}</span></li>
+        <li><a href="/reset_password">Change password</a></li>
+        {% else %}
+        <li><a href="/login">Login</a></li>
+        {% endif %}
+
+
+
+
+
+        <!-- <li><a href="pages/full-width.html">Full Width</a><span>Test Text Here</span></li>
+        <li><a href="pages/style-demo.html">Style Demo</a><span>Test Text Here</span></li> -->
+        <li class="active"><a href="#">Home</a><span>Homepage</span></li>
+        </ul>
+      </div>
+      <div id="logo">
+        <h1><a href="#"><strong>N</strong>E<strong>W</strong>S</a></h1>
+        <p>Latest News for Free</p>
+      </div>
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper col2">
+    <div id="featured_slide">
+
+      {% for i in top.articles %}
+      {% if i.description != None and forloop.counter <= 5 %}
+      <div style="color: black;" class="featured_box">
+      <center><p class="my-2" style="font-size:20px;"><b>{{i.title}}:</b></p></center>
+        <!-- <center><h2 style="font-size: large;">{{i.title}}</h2></center> -->
+        <div class="floater align-items-end">
+          <p style="color: whitesmoke">{{i.description}}</p>
+        </div>
+        
+        <form method="GET" action="{% url 'summarize_page' %}">
+          {% csrf_token %}
+
+          <input type="hidden" class="form-control" name="url" value="{{i.url}}"
+            placeholder="Paste Complete Valid URL" />
+
+
+
+          <p class="readmore"><a href="{{i.url}}">Read Article&raquo;</a>
+          <input type="hidden" name="title" value="{{i.title}}">
+          <input type="hidden" name="link" value="{{i.url}}">
+          <button value="submit">Summary&raquo;</button></p>
+        </form>
+        <img src="{{i.urlToImage}}" style="height:125%;" alt="" />
+      </div>
+      {% endif %}
+      {% endfor %}
+
+
+      <!-- <div class="featured_box">
+      <div class="floater">
+        <h2>2. Aliquatjusto quisque nam</h2>
+        <p>Duisvest lacus pellus purus temper maurisus et sodalesuada loreet sapiente et. Quissociis magnisl orci dui nulla ut antesque malesuada sed pede et.</p>
+      </div>
+      <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+      <img src="{% static 'NewsApp/images/930x375.gif' %}" alt="" /> </div> -->
+      <!-- <div class="featured_box">
+      <div class="floater">
+        <h2>3. Dapiensociis temper donec</h2>
+        <p>Pharetiumurna habitur et enim pellentesque phasellus aliquam nunc quis justo nam. Lobortororci dapibulum ac intesquet ut id sed intesque nec alique.</p>
+      </div>
+      <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+      <img src="{% static 'NewsApp/images/930x375.gif' %}" alt="" /> </div> -->
+      <!-- <div class="featured_box">
+      <div class="floater">
+        <h2>4. Dapiensociis temper donec</h2>
+        <p>Pharetiumurna habitur et enim pellentesque phasellus aliquam nunc quis justo nam. Lobortororci dapibulum ac intesquet ut id sed intesque nec alique.</p>
+      </div>
+      <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+      <img src="{% static 'NewsApp/images/930x375.gif' %}" alt="" /> </div> -->
+      <!-- <div class="featured_box">
+      <div class="floater">
+        <h2>5. Nullain convallis ris elis</h2>
+        <p>Nullamcorpervivamus nisl in sed adipit donec feugiat lor vel velit volutpat. Wisihabitur diculisi ac curabitur cursuspendreris sociis sed eger ipsum.</p>
+      </div>
+      <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+      <img src="{% static 'NewsApp/images/930x375.gif' %}" alt="" /> </div> -->
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper col3">
+    <div class="container">
+      <div class="content">
+        <!-- <div id="topstory">
+        <h2>Feugiatrutrum rhoncus semper</h2>
+        <ul>
+          <li><img src="/static/NewsApp/images/190x130.gif" alt="" />
+            <p>Nullamlacus dui ipsum conseqlo borttis non euisque morbipen a sdapibulum orna.</p>
+            <p>Urnau ltrices quis curabitur pha sellent esque congue magnisve stib ulum quismodo nulla et.</p>
+            <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+          </li> -->
+        <!-- <li><img src="/static/NewsApp/images/190x130.gif" alt="" />
+            <p>Nullamlacus dui ipsum conseqlo borttis non euisque morbipen a sdapibulum orna.</p>
+            <p>Urnau ltrices quis curabitur pha sellent esque congue magnisve stib ulum quismodo nulla et.</p>
+            <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+          </li>
+          <li class="last"><img src="/static/NewsApp/images/190x130.gif" alt="" />
+            <p>Nullamlacus dui ipsum conseqlo borttis non euisque morbipen a sdapibulum orna.</p>
+            <p>Urnau ltrices quis curabitur pha sellent esque congue magnisve stib ulum quismodo nulla et.</p>
+            <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+          </li> -->
+        <!-- </ul>
+        <br class="clear" />
+      </div> -->
+        <div id="latestnews">
+          <h2>Headlines</h2>
+          <ul>
+            {% for i in top.articles %}
+            {% if i.description != None and forloop.counter >= 6 and forloop.counter <= 15 %}
+            <li>
+              <div class="imgholder"><img style="height: 125px; width:125px;" src="{{i.urlToImage}}" alt="" /></div>
+              <div class="latestnews">
+                <h2>{{i.title}}</h2>
+                <p>{{i.description}}</p>
+                <form method="GET" action="{% url 'summarize_page' %}">
+          {% csrf_token %}
+
+          <input type="hidden" class="form-control" name="url" value="{{i.url}}"
+            placeholder="Paste Complete Valid URL" />
+
+          <input type="hidden" name="title" value="{{i.title}}">
+          <input type="hidden" name="link" value="{{i.url}}">
+
+          <p class="readmore"><a href="{{i.url}}">Read Article&raquo;</a>
+          
+          <button value="submit">Summary&raquo;</button></p>
+        </form>
+              </div>
+              <br class="clear" />
+            </li>
+            {% endif %}
+            {% endfor %}
+            <!-- <li class="last">
+            <div class="imgholder"><img src="/static/NewsApp/images/imgl.gif" alt="" /></div>
+            <div class="latestnews">
+              <h2>Indonectetus facilis leo nibh</h2>
+              <p>Attincidunt vel nam a maurisus lacinia consectetus magnisl sed ac morbi. Inmaurisus habitur pretium eu et ac vest penatibus id lacus parturpis. Maecenaset adipiscinia tellentum nullam velit et a convallis curabitae vitae laoreet niseros ligula sem sed susp en at.</p>
+              <p class="readmore"><a href="#">Continue Reading &raquo;</a></p>
+            </div>
+            <br class="clear" />
+          </li> -->
+          </ul>
+        </div>
+      </div>
+      <div class="column">
+        <div class="sponsors">
+          <h2>Categories</h2>
+          <div class="b_250"><a href="general"><img style="height: 250px; width:250px;"
+                src="/static/NewsApp/images/general.png" alt="" /></a></div>
+          <div class="b_125">
+            <ul>
+              <li><a href="entertainment"><img style="height: 125px; width:125px;"
+                    src="/static/NewsApp/images/entertainment.png" alt="" /></a></li>
+              <li><a href="business"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/business.png"
+                    alt="" /></a></li>
+              <li><a href="sports"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/sports.png"
+                    alt="" /></a></li>
+              <li><a href="music"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/music.png"
+                    alt="" /></a></li>
+              <li><a href="science"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/science.png"
+                    alt="" /></a></li>
+              <li><a href="politics"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/politics.png"
+                    alt="" /></a></li>
+              <li><a href="health"><img style="height: 125px; width:125px;" src="/static/NewsApp/images/health.png"
+                    alt="" /></a></li>
+              <li><a href="technology"><img style="height: 125px; width:125px;"
+                    src="/static/NewsApp/images/technology.png" alt="" /></a></li>
+            </ul>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper col4">
+    <div id="footer">
+      <div class="box1">
+        <h2>Team Members</h2>
+        <img class="imgl" style="width:80px; height:80px;" src="/static/NewsApp/images/meet.png" alt="" />
+        <img class="imgl" style="width:80px; height:80px;" src="/static/NewsApp/images/devansh.png" alt="" />
+        <img class="imgl" style="width:80px; height:80px;" src="/static/NewsApp/images/gandhi.png" alt="" />
+        <img class="imgl" style="width:80px; height:80px;" src="/static/NewsApp/images/aarchi.png" alt="" />
+        <p><br>Meet Variya<br><a href="https://www.linkedin.com/in/meet-variya/">LinkedIn Profile</a></p><br>
+        <p><br>Devansh Shah<br><a href="https://www.linkedin.com/in/devansh-shah-853345192">LinkedIn Profile</a></p><br>
+        <p><br>Nirdosh Gandhi<br><a href="https://www.linkedin.com/in/nirdosh-gandhi/">LinkedIn Profile</a></p><br>
+        <p><br>Aarchi Shah<br><a href="https://www.linkedin.com/in/aarchi-shah-97950117a/">LinkedIn Profile</a></p>
+      </div>
+      <div class="box contactdetails">
+        <h2>Our Internship Details </h2><br><br>
+
+        <ul>
+          <li>Company Name: BISAG-N</li><br>
+          <li>Address: Near CH '0' Circle, Highway, Indulal Yagnik Marg, Gandhinagar - Ahmedabad Rd, Gandhinagar </li>
+         
+          <li>Gujarat 382007</li><br>
+          <li>Phone No: 079 2321 3091</li><br>
+          <li>Website: <a href="https://bisag-n.in/">https://bisag-n.in</a></li><br>
+          <li class="last">LinkedIn: <a href="https://www.linkedin.com/school/bhaskaracharya-institute-for-space-applications-and-geo-informatics/mycompany/">linkedin/BISAG-N</a></li>
+        </ul>
+        <img style="width:155px; height:100px;" class="mt-3" src="static/NewsApp/images/bisag_logo.png">
+      </div>
+     
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper col5"><center>
+    <div id="copyright">
+      <p class="fl_left">Copyright &copy; 2021 - All Rights Reserved - </p>
+      <p class="fl_right"><p>NEWS PORTAL</p></p>
+      <br class="clear" />
+    </div></center>
+  </div>
+</body>
+
+</html>
